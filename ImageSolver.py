@@ -28,3 +28,6 @@ class ImageSolver:
         # 自动根据文件扩展名选择格式
         self.img.save(filePath)
         
+    # 获得底层的pil image
+    def getImageImpl(self):
+        return self.img

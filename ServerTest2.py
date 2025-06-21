@@ -5,10 +5,20 @@ from ImageMessage import ImageMessage
 from ImageEndMessage import ImageEndMessage
 from ImageReceiveMessage import ImageReceiveMessage
 from ImageRowData import ImageRowData
+from HunyuanMeshGenMessage import HunyuanMeshGenMessage
+from MeshGenServer import MeshGenServer
+from MeshMessage import MeshMessage
+from RequestMeshVertices import RequestMeshVertices
+from VertexFinishMessage import VertexFinishMessage
+from VertexArrayBack import VertexArrayBack
+from MeshTestMessage import MeshTestMessage
 import MessageLoop
 
 # 默认的端口号
 port = 23456
+
+# 初始化mesh gen的server
+# MeshGenServer.serverInstance = MeshGenServer()
 
 # 新建SocketSolver
 solver = SocketSolver()
@@ -20,6 +30,13 @@ manager.registerMessage(ImageMessage(None))
 manager.registerMessage(ImageReceiveMessage(0, 0))
 manager.registerMessage(ImageEndMessage())
 manager.registerMessage(ImageRowData(None,0,0,0))
+manager.registerMessage(HunyuanMeshGenMessage())
+manager.registerMessage(MeshMessage(None, 0))
+manager.registerMessage(VertexArrayBack(None, 0, 0))
+manager.registerMessage(VertexFinishMessage(0))
+manager.registerMessage(RequestMeshVertices())
+manager.registerMessage(MeshTestMessage())
+
 # 启动solver的监听过程
 solver.listen(port)
 

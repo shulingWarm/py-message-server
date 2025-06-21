@@ -12,16 +12,19 @@ class SocketSolver:
         # 每种数据类型的字节数
         self.typeByteSizeMap = {
             'int':4,
-            'uint':4
+            'uint':4,
+            'float':4,  # 单精度浮点数占4字节
+            'double':8  # 双精度浮点数占8字节
         }
         # 每种数据类型对应的unpack符号
         self.typePackSymbol = {
             'int':'<i',
-            'uint':'<I'
+            'uint':'<I',
+            'float':'<f',  # 单精度浮点数格式符
+            'double':'<d'  # 双精度浮点数格式符
         }
 
     def listen(self, port: int):
-        """创建服务器套接字并等待客户端连接"""
         # 关闭现有连接（如果有）
         if self.client_socket:
             self.client_socket.close()
@@ -49,7 +52,6 @@ class SocketSolver:
             raise RuntimeError(f"Listen failed: {str(e)}")
 
     def readData(self, byteSize: int) -> bytearray:
-        """阻塞式读取指定字节数的数据"""
         if not self.client_socket:
             raise RuntimeError("No active connection. Call listen() first.")
         
@@ -69,7 +71,6 @@ class SocketSolver:
             raise RuntimeError(f"Read operation failed: {str(e)}")
 
     def writeData(self, data: bytearray):
-        """发送字节数组到客户端"""
         if not self.client_socket:
             raise RuntimeError("No active connection. Call listen() first.")
         
@@ -115,6 +116,38 @@ class SocketSolver:
         byteData = struct.pack(self.getTypeSymbol(dataType), value)
         # 将数据发送出去
         self.writeData(byteData)
+
+    def readArray(self, dataType, size):
+        # 获取单元素的struct格式符（带字节序）
+        typeSymbol = self.getTypeSymbol(dataType)
+        # 拆分字节序符号和类型符号
+        endian_symbol = typeSymbol[0]  # 第一个字符是字节序（'<' 或 '>'）
+        base_symbol = typeSymbol[1:]   # 剩余部分是基础类型符（如 'i', 'I'）
+        
+        # 创建完整的数组格式符（字节序 + 元素个数 + 基础类型符）
+        arrayFormat = f"{endian_symbol}{size}{base_symbol}"
+        # 计算需要读取的总字节数
+        elementByteSize = self.getTypeByteSize(dataType)
+        totalBytes = elementByteSize * size
+        
+        # 读取整个数组的数据
+        byteData = self.readData(totalBytes)
+        # 一次性解包整个数组
+        return list(struct.unpack(arrayFormat, byteData))
+
+    def writeArray(self, dataType, dataList):
+        # 获取单元素的struct格式符（带字节序）
+        typeSymbol = self.getTypeSymbol(dataType)
+        # 拆分字节序符号和类型符号
+        endian_symbol = typeSymbol[0]  # 第一个字符是字节序（'<' 或 '>'）
+        base_symbol = typeSymbol[1:]   # 剩余部分是基础类型符（如 'i', 'I'）
+        
+        # 创建完整的数组格式符（字节序 + 元素个数 + 基础类型符）
+        arrayFormat = f"{endian_symbol}{len(dataList)}{base_symbol}"
+        # 一次性打包整个列表
+        byteData = struct.pack(arrayFormat, *dataList)
+        # 发送打包后的字节数据
+        self.writeData(bytearray(byteData))
 
     # 写入字符串
     def writeUTF(self, message):
