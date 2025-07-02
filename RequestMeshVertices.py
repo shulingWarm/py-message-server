@@ -19,10 +19,12 @@ class RequestMeshVertices(AbstractMessage):
         # 获取idpackage
         meshPackage = stream.getPackageManager().getLocalPackage(idPackage)
         # 检查mesh是否已经发送完了所有的vertex
-        if meshPackage.mesh.getVertexNum() >= idVertex:
+        if meshPackage.mesh.getVertexNum() <= idVertex:
             # 发送所有节点发送完成的消息
+            print('Vertex发送完成')
             messageManager.sendMessage(VertexFinishMessage(idPackage))
-        # 获取mesh里面的点列表
-        vertexList = meshPackage.mesh.getVertexArray(idVertex, meshPackage.vertexSendNum)
-        # 新建vertex列表回传的message
-        messageManager.sendMessage(VertexArrayBack(vertexList, idPackage, idVertex))
+        else:
+            # 获取mesh里面的点列表
+            vertexList = meshPackage.mesh.getVertexArray(idVertex, meshPackage.vertexSendNum)
+            # 新建vertex列表回传的message
+            messageManager.sendMessage(VertexArrayBack(vertexList, idPackage, idVertex))

@@ -1,7 +1,7 @@
 from AbstractMessage import AbstractMessage
 from MeshGenServer import MeshGenServer, MeshPostProcessInterface
 from MeshMessage import MeshMessage
-from MeshSolver import MeshSolver
+from NumpyMeshSolver import NumpyMeshSolver
 
 # 回传mesh消息用到的回调
 # 这是mesh完成后调用的接口
@@ -13,9 +13,12 @@ class MeshFinishCallback(MeshPostProcessInterface):
 
     def meshProcess(self,mesh):
         # 这里需要把mesh封装成mesh solver
-        meshSolver = MeshSolver(mesh)
+        meshSolver = NumpyMeshSolver(mesh.vertexList,
+            mesh.faceList, mesh.vertexUvList, 
+            mesh.faceUvList, mesh.textureData, mesh.textureMetallic
+        )
         # 回传收到的mesh消息
-        self.messageManager.sendMessage(MeshMessage(idImagePackage, meshSolver))
+        self.messageManager.sendMessage(MeshMessage(self.idImagePackage, meshSolver))
 
 class HunyuanMeshGenMessage(AbstractMessage):
     def __init__(self):
@@ -35,4 +38,4 @@ class HunyuanMeshGenMessage(AbstractMessage):
         # 获取mesh gen server
         server = MeshGenServer.serverInstance
         # 调用server里面读取图片的过程
-        server.generateMesh(image.getImageImpl(), MeshFinishCallback(messageManager, idImagePackage))
+        server.generateMesh(image.getImageImpl(), MeshFinishCallback(messageManager, infoId))

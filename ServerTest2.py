@@ -12,13 +12,16 @@ from RequestMeshVertices import RequestMeshVertices
 from VertexFinishMessage import VertexFinishMessage
 from VertexArrayBack import VertexArrayBack
 from MeshTestMessage import MeshTestMessage
+from RequestFaceMessage import RequestFaceMessage
+from FaceArrayBack import FaceArrayBack
+from FinishFaceMessage import FinishFaceMessage
 import MessageLoop
 
 # 默认的端口号
 port = 23456
 
 # 初始化mesh gen的server
-# MeshGenServer.serverInstance = MeshGenServer()
+MeshGenServer.serverInstance = MeshGenServer()
 
 # 新建SocketSolver
 solver = SocketSolver()
@@ -36,12 +39,14 @@ manager.registerMessage(VertexArrayBack(None, 0, 0))
 manager.registerMessage(VertexFinishMessage(0))
 manager.registerMessage(RequestMeshVertices())
 manager.registerMessage(MeshTestMessage())
+manager.registerMessage(RequestFaceMessage())
+manager.registerMessage(FaceArrayBack(0,0,None))
+manager.registerMessage(FinishFaceMessage(0))
 
 # 启动solver的监听过程
 solver.listen(port)
 
 # 启动主线程
 thread = MessageLoop.startLoop(manager, solver)
-
-while(True):
-    pass
+# python里面不要考虑多线程的事，会严重影响性能的
+thread.join()

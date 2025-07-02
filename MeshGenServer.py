@@ -1,4 +1,4 @@
-from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
+from HunyuanTextureMeshPipeline import HunyuanTextureMeshPipeline
 import threading
 
 
@@ -27,16 +27,18 @@ class MeshGenServer:
 
     def __init__(self):
         # hunyuan 3D的pipeline
-        self.pipeline = Hunyuan3DDiTFlowMatchingPipeline.from_single_file(
-            ckpt_path='/mnt/data/models/Hunyuan3D_dit_v2/model.fp16.ckpt',
-            config_path='/mnt/data/models/Hunyuan3D_dit_v2/config.yaml')
+        self.pipeline = HunyuanTextureMeshPipeline(
+            '/mnt/data/models/Hunyuan3D_dit_v2',
+            '/mnt/data/models/Hunyuan3D-2.1'
+        )
 
     # 根据传入的图片生成mesh
     def generateMesh(self, image, meshPostProcess):
-        # 启动生成mesh的runner
-        thread = threading.Thread(
-            target=meshGenProcess,
-            args=(self.pipeline, image, meshPostProcess)
-        )
-        # 启动线程
-        thread.start()
+        meshGenProcess(self.pipeline, image, meshPostProcess)
+        # # 启动生成mesh的runner
+        # thread = threading.Thread(
+        #     target=meshGenProcess,
+        #     args=(self.pipeline, image, meshPostProcess)
+        # )
+        # # 启动线程
+        # thread.start()

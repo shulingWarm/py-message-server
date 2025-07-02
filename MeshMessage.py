@@ -22,6 +22,8 @@ class MeshMessage(AbstractMessage):
         stream.writeUInt(self.idImagePackage)
         # 写入节点的个数
         stream.writeUInt(self.mesh.getVertexNum())
+        # 发送face的个数
+        stream.writeUInt(self.mesh.getMeshFaceNum())
         
         
 
