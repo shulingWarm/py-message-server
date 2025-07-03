@@ -9,4 +9,4 @@ class MeshPackage:
         # 节点是否已经发送完
         self.sendVerticeOk = False
         # 每次vertex发送的个数
-        self.vertexSendNum = 1024
+        self.vertexSendNum = 256

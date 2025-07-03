@@ -16,14 +16,17 @@ class MeshMessage(AbstractMessage):
         idPackage = stream.getPackageManager().registerPackageTask(MeshPackage(
             self.idImagePackage, self.mesh
         ))
+        vertexNum = self.mesh.getVertexNum()
+        faceNum = self.mesh.getMeshFaceNum()
+        print('发送mesh, 节点个数:', vertexNum, "面个数: ", faceNum)
         # 发送数据包的id
         stream.writeUInt(idPackage)
         # 写入原始的图片id
         stream.writeUInt(self.idImagePackage)
         # 写入节点的个数
-        stream.writeUInt(self.mesh.getVertexNum())
+        stream.writeUInt(vertexNum)
         # 发送face的个数
-        stream.writeUInt(self.mesh.getMeshFaceNum())
+        stream.writeUInt(faceNum)
         
         
 

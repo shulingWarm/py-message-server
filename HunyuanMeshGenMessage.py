@@ -17,8 +17,7 @@ class MeshFinishCallback(MeshPostProcessInterface):
             mesh.faceList, mesh.vertexUvList, 
             mesh.faceUvList, mesh.textureData, mesh.textureMetallic
         )
-        # 回传收到的mesh消息
-        self.messageManager.sendMessage(MeshMessage(self.idImagePackage, meshSolver))
+        self.messageManager.sendMessage(MeshMessage(meshSolver, self.idImagePackage))
 
 class HunyuanMeshGenMessage(AbstractMessage):
     def __init__(self):

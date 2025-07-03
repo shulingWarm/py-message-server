@@ -175,10 +175,10 @@ class SocketSolver:
         return self.readType('int')
     
     def writeUInt(self, value):
-        self.writeType('uint', value)
+        self.writeType('uint', int(value))
 
     def writeInt(self, value):
-        self.writeType('int', value)
+        self.writeType('int', int(value))
 
     # 获得分包管理器
     def getPackageManager(self):
