@@ -27,6 +27,10 @@ class MeshMessage(AbstractMessage):
         stream.writeUInt(vertexNum)
         # 发送face的个数
         stream.writeUInt(faceNum)
+        # 发送texture的大小
+        width, height, channel = self.mesh.getTextureSize()
+        stream.writeUInt(width)
+        stream.writeUInt(height)
         
         
 

@@ -15,6 +15,14 @@ from MeshTestMessage import MeshTestMessage
 from RequestFaceMessage import RequestFaceMessage
 from FaceArrayBack import FaceArrayBack
 from FinishFaceMessage import FinishFaceMessage
+from LongArrayMessage import LongArrayMessage
+from RequestLongArrayMessage import RequestLongArrayMessage
+from LongArrayBackMessage import LongArrayBackMessage
+from UvVertexFinishMessage import UvVertexFinishMessage
+from RequestTextureMessage import RequestTextureMessage
+from TextureFinishMessage import TextureFinishMessage
+from RequestFaceUvMessage import RequestFaceUvMessage
+from FaceUvFinishMessage import FaceUvFinishMessage
 import MessageLoop
 
 # 默认的端口号
@@ -42,6 +50,14 @@ manager.registerMessage(MeshTestMessage())
 manager.registerMessage(RequestFaceMessage())
 manager.registerMessage(FaceArrayBack(0,0,None))
 manager.registerMessage(FinishFaceMessage(0))
+manager.registerMessage(LongArrayMessage(None, None))
+manager.registerMessage(RequestLongArrayMessage())
+manager.registerMessage(LongArrayBackMessage(0,0,None))
+manager.registerMessage(UvVertexFinishMessage(0))
+manager.registerMessage(RequestTextureMessage())
+manager.registerMessage(TextureFinishMessage(0))
+manager.registerMessage(RequestFaceUvMessage())
+manager.registerMessage(FaceUvFinishMessage(0))
 
 # 启动solver的监听过程
 solver.listen(port)

@@ -1,6 +1,9 @@
 from AbstractMessage import AbstractMessage
 from FaceArrayBack import FaceArrayBack
 from FinishFaceMessage import FinishFaceMessage
+from UvVertexFinishMessage import UvVertexFinishMessage
+from ArrayFinishMessageFunctor import ArrayFinishMessageFunctor
+from LongArrayMessage import LongArrayMessage
 
 class RequestFaceMessage(AbstractMessage):
     def __init__(self):
@@ -22,7 +25,14 @@ class RequestFaceMessage(AbstractMessage):
         # 检查是否已经发送完了
         if idFace >= mesh.getMeshFaceNum():
             print('Face Finish')
-            messageManager.sendMessage(FinishFaceMessage(idPackage))
+            # 发送uv完成的消息
+            vertexFinishMessage = UvVertexFinishMessage(idPackage)
+            # vertex uv的序列
+            vertexUvByteArray = mesh.getVertexUvByteArray()
+            # 发送uv序列
+            messageManager.sendMessage(LongArrayMessage(
+                vertexUvByteArray, ArrayFinishMessageFunctor(vertexFinishMessage)
+            ))
         else:
             print('Face: ', idFace)
             # 获取face序列

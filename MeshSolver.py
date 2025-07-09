@@ -30,3 +30,7 @@ class MeshSolver:
     # 获取数据的方式与getTextureData相同
     def getMetallicData(self,pixelId,pixelNum) -> list:
         pass
+
+    # 获取texture的大小
+    def getTextureSize(self) -> int:
+        pass

@@ -1,5 +1,6 @@
 from MeshSolver import MeshSolver
 import numpy as np
+import NumpyBoost
 
 class NumpyMeshSolver(MeshSolver):
     def __init__(self,
@@ -11,21 +12,33 @@ class NumpyMeshSolver(MeshSolver):
         textureMetallic: np.ndarray   # shape: [H, W, 3]
     ):
         # 初始化所有数据为只读属性，防止意外修改
-        self._vertices = vertices.view()
-        self._faceList = faceList.view()
-        self._vertexUv = vertexUv.view()
-        self._faceUvIndex = faceUvIndex.view()
-        self._textureData = textureData.view()
-        self._textureMetallic = textureMetallic.view()
-        
-        # 将数组设置为只读
-        for arr in [self._vertices, self._faceList, self._vertexUv, 
-                    self._faceUvIndex, self._textureData, self._textureMetallic]:
-            arr.flags.writeable = False
+        self._vertices = vertices
+        self._faceList = faceList
+        self._vertexUv = vertexUv
+        self._faceUvIndex = faceUvIndex
+        self._textureData = textureData
+        self._textureMetallic = textureMetallic
     
+    # 获取vertex uv的byte array
+    def getVertexUvByteArray(self):
+        return NumpyBoost.getNumpyByteArray(self._vertexUv)
+
+    # 获取face uv index对应的byte array
+    def getFaceUvByteArray(self):
+        return NumpyBoost.getNumpyByteArray(self._faceUvIndex)
+
+    # 获取texture的byte array
+    def getTextureByteArray(self):
+        return NumpyBoost.getNumpyByteArray(self._textureData)
+
     # 获取总的节点个数
     def getVertexNum(self) -> int:
         return self._vertices.shape[0]
+
+    # 获取texture的大小
+    def getTextureSize(self) -> int:
+        textureShape = self._textureData.shape
+        return textureShape[0], textureShape[1], textureShape[2]
 
     # 获取连续顶点序列（仅返回有效数据，不填充）
     def getVertexArray(self, vertexId: int, vertexNum: int) -> list:
@@ -54,10 +67,6 @@ class NumpyMeshSolver(MeshSolver):
         # 提取并展平有效面数据
         data = self._faceList[faceId:end_idx]
         return data.ravel().tolist()
-
-    # 获取纹理尺寸 (宽, 高)
-    def getTextureDataSize(self) -> tuple:
-        return (self._textureData.shape[1], self._textureData.shape[0])  # (width, height)
 
     # 获取连续纹理像素 [r0,g0,b0, r1,g1,b1,...]
     def getTextureData(self, pixelId: int, pixelNum: int) -> list:
