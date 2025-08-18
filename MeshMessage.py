@@ -3,11 +3,12 @@ from MeshPackage import MeshPackage
 
 # 用于发送mesh的消息
 class MeshMessage(AbstractMessage):
-    def __init__(self, mesh, idImagePackage):
+    def __init__(self, mesh, idImagePackage, idTaskPackage):
         super().__init__('MeshMessage')
         # 记录要发送的mesh
         self.mesh = mesh
         self.idImagePackage = idImagePackage
+        self.idTaskPackage = idTaskPackage
 
     def send(self, stream):
         # 新建数据头
@@ -21,6 +22,8 @@ class MeshMessage(AbstractMessage):
         print('发送mesh, 节点个数:', vertexNum, "面个数: ", faceNum)
         # 发送数据包的id
         stream.writeUInt(idPackage)
+        # 发送任务包id，方便用户接收应答
+        stream.writeUInt(self.idTaskPackage)
         # 写入原始的图片id
         stream.writeUInt(self.idImagePackage)
         # 写入节点的个数

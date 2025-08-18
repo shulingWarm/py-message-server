@@ -1,6 +1,7 @@
 from MeshSolver import MeshSolver
 import numpy as np
 import NumpyBoost
+from TextureLibrary import convertToUIntFormat
 
 class NumpyMeshSolver(MeshSolver):
     def __init__(self,
@@ -16,8 +17,8 @@ class NumpyMeshSolver(MeshSolver):
         self._faceList = faceList
         self._vertexUv = vertexUv
         self._faceUvIndex = faceUvIndex
-        self._textureData = textureData
-        self._textureMetallic = textureMetallic
+        self._textureData = convertToUIntFormat(textureData)
+        self._textureMetallic = convertToUIntFormat(textureMetallic)
     
     # 获取vertex uv的byte array
     def getVertexUvByteArray(self):

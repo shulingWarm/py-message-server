@@ -35,7 +35,7 @@ class LongArrayPackage:
     def __init__(self,dataArray,finishFunctor):
         self.dataArray = dataArray
         # 每次传输的字节数
-        self.byteNumPerSend = 8192
+        self.byteNumPerSend = 65536
         self.finishFunctor = finishFunctor
 
     # 获取data array的指定片段
