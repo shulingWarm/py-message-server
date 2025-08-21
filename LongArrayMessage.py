@@ -1,5 +1,6 @@
 from AbstractMessage import AbstractMessage
-from LongArrayPackage import LongArrayPackage
+from LongArrayPackage import LongArrayPackage, LongArrayReceivePackage
+from RequestLongArrayMessage import RequestLongArrayMessage
 
 class LongArrayMessage(AbstractMessage):
     def __init__(self, dataArray, finishFunctor):
@@ -20,5 +21,12 @@ class LongArrayMessage(AbstractMessage):
         stream.writeUInt(len(self.dataArray))
 
     def receive(self, stream, messageManager):
-        pass
-        
+        # 接收package id
+        idPackage = stream.readUInt()
+        # 读取package里面的byte个数
+        byteNum = stream.readUInt()
+        # 新建远端数据包
+        stream.getPackageManager().registerRemotePackage(idPackage, 
+            LongArrayPackage(byteNum))
+        # 请求第一组数据
+        messageManager.sendMessage(RequestLongArrayMessage(idPackage=idPackage,idData=0))

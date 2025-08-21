@@ -2,13 +2,18 @@ from AbstractMessage import AbstractMessage
 from LongArrayBackMessage import LongArrayBackMessage
 
 class RequestLongArrayMessage(AbstractMessage):
-    def __init__(self):
+    def __init__(self, idPackage=0, idData=0):
         super().__init__('RequestLongArrayMessage')
+        self.idPackage=idPackage
+        self.idData = idData
 
     # 消息的发送逻辑
     # 需要根据数据流来发送
     def send(self, stream):
-        pass
+        # 写入请求的包id
+        stream.writeUInt(self.idPackage)
+        # 写入请求的数据id
+        stream.writeUInt(self.idData)
 
     def receive(self, stream, messageManager):
         # 接收package id

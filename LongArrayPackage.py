@@ -45,3 +45,13 @@ class LongArrayPackage:
     # 获取数据的个数
     def getDataLength(self):
         return len(self.dataArray)
+
+# 用于接收long array的package
+class LongArrayReceivePackage:
+    def __init__(self,byteNum):
+        self.byteNum
+        self.dataArray = bytearray(byteNum)
+
+    # 写入指定的片段
+    def recordByteArray(self, writeArray, beginId):
+        self.dataArray[beginId:beginId+len(writeArray)] = writeArray

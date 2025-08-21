@@ -20,4 +20,19 @@ class LongArrayBackMessage(AbstractMessage):
         stream.writeData(self.dataArray)
 
     def receive(self, stream, messageManager):
-        pass
+        # 接收package id
+        idPackage = stream.readUInt()
+        # 接收起始id
+        idData = stream.readUInt()
+        # 接收数据长度
+        dataLength = stream.readUInt()
+        # 读取数据
+        tempData = stream.readData(dataLength)
+        # 获取package
+        package = stream.getPackageManager().getRemotePackage(idPackage)
+        # 向package里面写入数据
+        package.recordByteArray(tempData, idData)
+        # 请求下一组数据
+        requestMessage = RequestLongArrayMessage(idPackage=idPackage,
+            idData=idData+dataLength)
+        messageManager.sendMessage(requestMessage)
