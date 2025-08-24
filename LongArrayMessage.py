@@ -27,6 +27,6 @@ class LongArrayMessage(AbstractMessage):
         byteNum = stream.readUInt()
         # 新建远端数据包
         stream.getPackageManager().registerRemotePackage(idPackage, 
-            LongArrayPackage(byteNum))
+            LongArrayReceivePackage(byteNum))
         # 请求第一组数据
         messageManager.sendMessage(RequestLongArrayMessage(idPackage=idPackage,idData=0))

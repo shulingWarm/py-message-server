@@ -34,3 +34,10 @@ class RequestLongArrayMessage(AbstractMessage):
             # 发送long array的回传消息
             messageManager.sendMessage(LongArrayBackMessage(idPackage, 
                 idData, dataSlice))
+
+# 这是一个静态函数，用于生成新的请求
+def staticLongArrayRequest(messageManager, idPackage, idData):
+    # 新建一个request的message
+    requestMessage = RequestLongArrayMessage(idPackage, idData)
+    # 把消息发送出去
+    messageManager.sendMessage(requestMessage)

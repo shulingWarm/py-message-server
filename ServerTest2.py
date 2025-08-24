@@ -16,7 +16,7 @@ from RequestFaceMessage import RequestFaceMessage
 from FaceArrayBack import FaceArrayBack
 from FinishFaceMessage import FinishFaceMessage
 from LongArrayMessage import LongArrayMessage
-from RequestLongArrayMessage import RequestLongArrayMessage
+from RequestLongArrayMessage import RequestLongArrayMessage, staticLongArrayRequest
 from LongArrayBackMessage import LongArrayBackMessage
 from UvVertexFinishMessage import UvVertexFinishMessage
 from RequestTextureMessage import RequestTextureMessage
@@ -52,7 +52,7 @@ manager.registerMessage(FaceArrayBack(0,0,None))
 manager.registerMessage(FinishFaceMessage(0))
 manager.registerMessage(LongArrayMessage(None, None))
 manager.registerMessage(RequestLongArrayMessage())
-manager.registerMessage(LongArrayBackMessage(0,0,None))
+manager.registerMessage(LongArrayBackMessage(0,0,None, staticLongArrayRequest))
 manager.registerMessage(UvVertexFinishMessage(0))
 manager.registerMessage(RequestTextureMessage())
 manager.registerMessage(TextureFinishMessage(0))

@@ -1,4 +1,6 @@
 from AbstractMessage import AbstractMessage
+from ImageSolver import ImageSolver
+from ImagePackage import ImagePackage
 
 class ImageEndMessage(AbstractMessage):
     def __init__(self):
@@ -9,11 +11,20 @@ class ImageEndMessage(AbstractMessage):
         pass
 
     def receive(self, stream, messageManager):
-        # 获取包id
-        idPackage = stream.readUInt()
-        # 获取图片数据包
-        imagePackage = stream.getPackageManager().getRemotePackage(idPackage)
-        # 把收到的图片保存在本地
-        imagePackage.image.save('test.png')
-        # 删除图片消息
-        stream.getPackageManager().deleteRemotePackage(idPackage)
+        # 读取long array package
+        arrayPackageId = stream.readUInt()
+        # 读取图片的宽高
+        imgWidth = stream.readUInt()
+        imgHeight = stream.readUInt()
+        # 读取用于存储图片package的id
+        imgPackageId = stream.readUInt()
+        # 打开long array的package
+        arrayPackage = stream.getPackageManager().getRemotePackage(arrayPackageId)
+        # 从long array package里面取出bytearray
+        imgDataArray = arrayPackage.dataArray
+        # 用array里面的信息构建image
+        tempImage = ImageSolver(imgWidth,imgHeight,imgDataArray)
+        # 用Image构造ImagePackage
+        imagePackage = ImagePackage(tempImage)
+        # 记录图片的package
+        stream.getPackageManager().registerRemotePackage(imgPackageId, imagePackage)

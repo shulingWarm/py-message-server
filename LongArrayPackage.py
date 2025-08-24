@@ -49,7 +49,7 @@ class LongArrayPackage:
 # 用于接收long array的package
 class LongArrayReceivePackage:
     def __init__(self,byteNum):
-        self.byteNum
+        self.byteNum = byteNum
         self.dataArray = bytearray(byteNum)
 
     # 写入指定的片段

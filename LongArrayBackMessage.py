@@ -1,11 +1,13 @@
 from AbstractMessage import AbstractMessage
 
 class LongArrayBackMessage(AbstractMessage):
-    def __init__(self, idPackage, idData, dataArray):
+    def __init__(self, idPackage, idData, dataArray, 
+        requestFunctor = None):
         super().__init__('LongArrayBackMessage')
         self.idPackage = idPackage
         self.idData = idData
         self.dataArray = dataArray
+        self.requestFunctor = requestFunctor #这是用来接收到数据back之后重新发送请求用的
 
     # 消息的发送逻辑
     # 需要根据数据流来发送
@@ -30,9 +32,8 @@ class LongArrayBackMessage(AbstractMessage):
         tempData = stream.readData(dataLength)
         # 获取package
         package = stream.getPackageManager().getRemotePackage(idPackage)
+        print('收到数据: ', idData, '/', package.byteNum)
         # 向package里面写入数据
         package.recordByteArray(tempData, idData)
-        # 请求下一组数据
-        requestMessage = RequestLongArrayMessage(idPackage=idPackage,
-            idData=idData+dataLength)
-        messageManager.sendMessage(requestMessage)
+        # 调用request functor
+        self.requestFunctor(messageManager, idPackage, idData+dataLength)
