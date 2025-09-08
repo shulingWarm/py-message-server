@@ -1,5 +1,5 @@
 from AbstractMessage import AbstractMessage
-from ReconPipeline import getReconInstance
+import ReconPipeline
 from LongArrayFinishFunctor import LongArrayFinishFunctor
 from ReconResultMsg import ReconResultMsg
 import FileCommLib
@@ -7,8 +7,9 @@ import FileCommLib
 # 重建完成时的functor
 # 用于通知UE已经发送完了重建完成的消息
 class ReconLongArrayEndFunctor(LongArrayFinishFunctor):
-    def __init__(self):
-        pass
+    # requestIdPackage 用来记录当时的重建请求
+    def __init__(self,requestIdPackage):
+        self.requestIdPackage = requestIdPackage
 
     # 执行函数
     def __call__(self,messageManager, idPackage):
@@ -30,9 +31,9 @@ class ReconBeginMsg(AbstractMessage):
         # 重建接收包可以就此删除了
         stream.getPackageManager().deleteRemotePackage(idPackage)
         # 用于重建的pipeline
-        reconPipeline = getReconInstance()
+        reconPipeline = ReconPipeline.getReconInstance()
         # 开始执行重建
-        resultPath = reconPipeline.run(reconPkg)
+        resultPath = reconPipeline.run(reconPkg.scene_path)
         # 回调消息，用于发送完成重建结果的事情
         finishFunctor = ReconLongArrayEndFunctor()
         # 执行发送文件的逻辑

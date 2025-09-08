@@ -30,6 +30,7 @@ class ReconPipeline:
 reconPipeInstance = None
 
 def getReconInstance():
+    global reconPipeInstance
     if(reconPipeInstance is None):
         reconPipeInstance = ReconPipeline()
     return reconPipeInstance

@@ -1,8 +1,9 @@
 import socket
 import struct
 from PackageMsgManager import PackageMsgManager
+from StreamInterface import StreamInterface
 
-class SocketSolver:
+class SocketSolver(StreamInterface):
     def __init__(self):
         self.server_socket = None
         self.client_socket = None

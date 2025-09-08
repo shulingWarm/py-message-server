@@ -14,7 +14,6 @@ def delete_folder(folder_path):
     try:
         # 检查路径是否存在
         if not os.path.exists(folder_path):
-            print(f"警告：路径 '{folder_path}' 不存在")
             return False
         
         # 检查是否是文件夹
@@ -95,3 +94,17 @@ def read_file_to_bytearray(file_path, verbose=False):
         if verbose:
             print(f"错误: {str(e)}", file=sys.stderr)
         return None
+    
+def save_bytearray_to_file(data: bytearray, file_path: str) -> None:
+    """
+    将bytearray数据保存为二进制文件
+    
+    参数:
+        data: bytearray类型的数据
+        file_path: 文件保存路径（字符串）
+    
+    返回:
+        None
+    """
+    with open(file_path, 'wb') as file:
+        file.write(data)

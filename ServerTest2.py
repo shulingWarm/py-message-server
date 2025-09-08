@@ -23,6 +23,10 @@ from RequestTextureMessage import RequestTextureMessage
 from TextureFinishMessage import TextureFinishMessage
 from RequestFaceUvMessage import RequestFaceUvMessage
 from FaceUvFinishMessage import FaceUvFinishMessage
+from ReconstructionMessage import ReconstructionMessage
+from ReconRecvMsg import ReconRecvMsg
+from ReconBeginMsg import ReconBeginMsg
+from ReconResultMsg import ReconResultMsg
 import MessageLoop
 
 # 默认的端口号
@@ -58,6 +62,10 @@ manager.registerMessage(RequestTextureMessage())
 manager.registerMessage(TextureFinishMessage(0))
 manager.registerMessage(RequestFaceUvMessage())
 manager.registerMessage(FaceUvFinishMessage(0))
+manager.registerMessage(ReconstructionMessage())
+manager.registerMessage(ReconRecvMsg(0))
+manager.registerMessage(ReconBeginMsg())
+manager.registerMessage(ReconResultMsg(0,0))
 
 # 启动solver的监听过程
 solver.listen(port)
