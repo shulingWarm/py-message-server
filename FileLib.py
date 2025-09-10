@@ -62,38 +62,33 @@ def read_file_to_bytearray(file_path, verbose=False):
         bytearray: 文件内容的bytearray
         None: 读取失败时返回
     """
-    try:
-        # 检查文件是否存在
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"文件不存在: {file_path}")
-        
-        # 检查是否为文件
-        if not os.path.isfile(file_path):
-            raise IsADirectoryError(f"路径是目录而不是文件: {file_path}")
-        
-        # 检查文件大小（防止读取超大文件）
-        file_size = os.path.getsize(file_path)
-        if verbose:
-            print(f"准备读取文件: {file_path} ({file_size} 字节)")
-        
-        # 设置读取限制（例如100MB）
-        MAX_SIZE = 100 * 1024 * 1024  # 100MB
-        if file_size > MAX_SIZE:
-            raise MemoryError(f"文件过大 ({file_size} 字节 > {MAX_SIZE} 字节限制)")
-        
-        # 读取文件
-        with open(file_path, 'rb') as file:
-            content = file.read()
-            
-            if verbose:
-                print(f"成功读取 {len(content)} 字节")
-                
-            return bytearray(content)
+    # 检查文件是否存在
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"文件不存在: {file_path}")
     
-    except Exception as e:
+    # 检查是否为文件
+    if not os.path.isfile(file_path):
+        raise IsADirectoryError(f"路径是目录而不是文件: {file_path}")
+    
+    # 检查文件大小（防止读取超大文件）
+    file_size = os.path.getsize(file_path)
+    if verbose:
+        print(f"准备读取文件: {file_path} ({file_size} 字节)")
+    
+    # 设置读取限制（例如100MB）
+    MAX_SIZE = 2048 * 1024 * 1024  # 2GB
+    if file_size > MAX_SIZE:
+        raise MemoryError(f"文件过大 ({file_size} 字节 > {MAX_SIZE} 字节限制)")
+    
+    # 读取文件
+    with open(file_path, 'rb') as file:
+        content = file.read()
+        
         if verbose:
-            print(f"错误: {str(e)}", file=sys.stderr)
-        return None
+            print(f"成功读取 {len(content)} 字节")
+            
+        return bytearray(content)
+    
     
 def save_bytearray_to_file(data: bytearray, file_path: str) -> None:
     """

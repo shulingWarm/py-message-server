@@ -27,13 +27,16 @@ from ReconstructionMessage import ReconstructionMessage
 from ReconRecvMsg import ReconRecvMsg
 from ReconBeginMsg import ReconBeginMsg
 from ReconResultMsg import ReconResultMsg
+from ReconSingleFileImg import ReconSingleFileImg
+from ReconSingleImgMsg import ReconSingleImgMsg
 import MessageLoop
 
 # 默认的端口号
 port = 23456
 
 # 初始化mesh gen的server
-MeshGenServer.serverInstance = MeshGenServer()
+# 需要调用Hunyuan 3D 生成的时候需要用到这个
+# MeshGenServer.serverInstance = MeshGenServer()
 
 # 新建SocketSolver
 solver = SocketSolver()
@@ -66,6 +69,8 @@ manager.registerMessage(ReconstructionMessage())
 manager.registerMessage(ReconRecvMsg(0))
 manager.registerMessage(ReconBeginMsg())
 manager.registerMessage(ReconResultMsg(0,0))
+manager.registerMessage(ReconSingleFileImg())
+manager.registerMessage(ReconSingleImgMsg())
 
 # 启动solver的监听过程
 solver.listen(port)

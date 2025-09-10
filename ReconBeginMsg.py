@@ -14,7 +14,7 @@ class ReconLongArrayEndFunctor(LongArrayFinishFunctor):
     # 执行函数
     def __call__(self,messageManager, idPackage):
         # 新建用于发送重建结果的消息
-        resultMsg = ReconResultMsg(idPackage)
+        resultMsg = ReconResultMsg(idPackage, self.requestIdPackage)
         messageManager.sendMessage(resultMsg)
 
 class ReconBeginMsg(AbstractMessage):
@@ -35,7 +35,7 @@ class ReconBeginMsg(AbstractMessage):
         # 开始执行重建
         resultPath = reconPipeline.run(reconPkg.scene_path)
         # 回调消息，用于发送完成重建结果的事情
-        finishFunctor = ReconLongArrayEndFunctor()
+        finishFunctor = ReconLongArrayEndFunctor(idPackage)
         # 执行发送文件的逻辑
         FileCommLib.sendFile(resultPath, messageManager, finishFunctor)
         

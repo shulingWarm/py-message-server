@@ -8,6 +8,8 @@ from LongArrayMessage import LongArrayMessage
 def sendFile(filePath, messageManager, finishFunctor):
     # 将二进制文件读取到bytearray
     fileByteArray = FileLib.read_file_to_bytearray(filePath)
+    if(fileByteArray is None):
+        raise RuntimeError('fileByteArray is None')
     longArrayMessage = LongArrayMessage(fileByteArray, finishFunctor)
     # 把消息发出去
     messageManager.sendMessage(longArrayMessage)

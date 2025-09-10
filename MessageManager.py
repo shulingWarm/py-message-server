@@ -1,4 +1,4 @@
-from AbstractMessage import AbstractMessage
+
 
 class MessageManager:
     def __init__(self, stream):
@@ -16,7 +16,7 @@ class MessageManager:
         return tag >= self.tagOffset
 
     # 注册消息
-    def registerMessage(self, message:AbstractMessage):
+    def registerMessage(self, message):
         # 需要确保名字不是空的
         if len(message.name) == 0:
             raise ValueError("Empty message name.")
@@ -27,7 +27,7 @@ class MessageManager:
         self.messageList.append(message)
 
     # 发送消息
-    def sendMessage(self, message:AbstractMessage):
+    def sendMessage(self, message):
         # 确认消息名是否在字典内
         if message.name not in self.messageTagMap:
             raise ValueError(f"Unknown message: {message.name}")

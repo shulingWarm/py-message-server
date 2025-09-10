@@ -11,7 +11,7 @@ class ReconPipeline:
     def __init__(self):
         # 加载vggt的pipeline
         self.vggt_pipeline = ReconstructionPipeline()
-        self.gs_pipeline = GaussianTrainPipeline()
+        self.gs_pipeline = GaussianTrainPipeline(iterations=10000)
 
     # 执行重建
     def run(self, scene_path):
