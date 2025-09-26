@@ -30,6 +30,34 @@ def delete_folder(folder_path):
         print(f"删除失败: {str(e)}")
         return False
 
+def clear_folder(folder_path):
+    """
+    删除文件夹内的所有内容，但保留文件夹本身。
+    
+    参数:
+        folder_path (str): 要清空的目标文件夹路径
+        
+    异常:
+        ValueError: 如果路径不是文件夹
+        OSError: 如果删除文件/文件夹时出错
+    """
+    # 确保路径存在且是文件夹
+    if not os.path.exists(folder_path):
+        return  # 如果不存在则静默返回
+    if not os.path.isdir(folder_path):
+        raise ValueError(f"路径 '{folder_path}' 不是文件夹")
+
+    # 遍历文件夹内容
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        
+        try:
+            if os.path.isfile(item_path) or os.path.islink(item_path):
+                os.unlink(item_path)  # 删除文件或链接
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)  # 递归删除子文件夹
+        except Exception as e:
+            raise OSError(f"删除 '{item_path}' 失败: {str(e)}")
 
 def mkdir_p(path):
     """

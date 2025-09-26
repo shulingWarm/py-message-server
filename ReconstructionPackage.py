@@ -9,10 +9,12 @@ class ReconstructionPackage:
         self.scene_path = '/mnt/data/temp/kitchen_workspace'
         # 保存图片的文件夹
         self.save_image_path = os.path.join(self.scene_path,'images')
+        # 清空用于保存图片的文件夹
+        FileLib.clear_folder(self.save_image_path)
         # 目前已经存储过的图片数
         self.saved_img_num = 0
         # 每个数字对应的格式
-        self.fmtList = ['none','jpg']
+        self.fmtList = ['none','jpg','png']
 
     # 递增图片的个数
     def increaseImgNum(self):

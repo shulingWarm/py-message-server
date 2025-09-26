@@ -36,7 +36,7 @@ port = 23456
 
 # 初始化mesh gen的server
 # 需要调用Hunyuan 3D 生成的时候需要用到这个
-# MeshGenServer.serverInstance = MeshGenServer()
+MeshGenServer.serverInstance = MeshGenServer()
 
 # 新建SocketSolver
 solver = SocketSolver()

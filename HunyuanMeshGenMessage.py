@@ -20,7 +20,7 @@ class MeshFinishCallback(MeshPostProcessInterface):
             mesh.faceUvList, mesh.textureData, mesh.textureMetallic
         )
         # 把texture保存到本地
-        saveTextureAsImage(meshSolver._textureData, '/mnt/data/temp/test_texture.jpg')
+        # saveTextureAsImage(meshSolver._textureData, '/mnt/data/temp/test_texture.jpg')
         self.messageManager.sendMessage(
             MeshMessage(meshSolver, self.idImagePackage, idTaskPackage=self.idTaskPackage))
 
