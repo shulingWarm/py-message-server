@@ -1,5 +1,6 @@
-from HunyuanTextureMeshPipeline import HunyuanTextureMeshPipeline
+from HunyuanTextureMeshPipeline import register_hunyuan_pipeline
 import threading
+from ModelLoadManager import get_model_manager
 
 
 # 定义Mesh后续处理的接口
@@ -27,14 +28,12 @@ class MeshGenServer:
 
     def __init__(self):
         # hunyuan 3D的pipeline
-        self.pipeline = HunyuanTextureMeshPipeline(
-            '/mnt/data/models/Hunyuan3D_dit_v2',
-            '/mnt/data/models/Hunyuan3D-2.1'
-        )
+        register_hunyuan_pipeline()
 
     # 根据传入的图片生成mesh
     def generateMesh(self, image, meshPostProcess):
-        meshGenProcess(self.pipeline, image, meshPostProcess)
+        meshGenProcess(get_model_manager().get_model('HunyuanTextureMeshPipeline'),
+                        image, meshPostProcess)
         # # 启动生成mesh的runner
         # thread = threading.Thread(
         #     target=meshGenProcess,

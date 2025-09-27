@@ -29,53 +29,57 @@ from ReconBeginMsg import ReconBeginMsg
 from ReconResultMsg import ReconResultMsg
 from ReconSingleFileImg import ReconSingleFileImg
 from ReconSingleImgMsg import ReconSingleImgMsg
+from ImageEditPipeline import register_image_edit_pipeline
 import MessageLoop
 
-# 默认的端口号
-port = 23456
 
-# 初始化mesh gen的server
-# 需要调用Hunyuan 3D 生成的时候需要用到这个
-MeshGenServer.serverInstance = MeshGenServer()
+if __name__ == '__main__':
+    # 默认的端口号
+    port = 23456
 
-# 新建SocketSolver
-solver = SocketSolver()
-# 新建消息管理器
-manager = MessageManager(solver)
-# 注册基本的hello message
-manager.registerMessage(HelloMessage())
-manager.registerMessage(ImageMessage(None))
-manager.registerMessage(ImageReceiveMessage(0, 0))
-manager.registerMessage(ImageEndMessage())
-manager.registerMessage(ImageRowData(None,0,0,0))
-manager.registerMessage(HunyuanMeshGenMessage())
-manager.registerMessage(MeshMessage(None, 0, 0))
-manager.registerMessage(VertexArrayBack(None, 0, 0))
-manager.registerMessage(VertexFinishMessage(0))
-manager.registerMessage(RequestMeshVertices())
-manager.registerMessage(MeshTestMessage())
-manager.registerMessage(RequestFaceMessage())
-manager.registerMessage(FaceArrayBack(0,0,None))
-manager.registerMessage(FinishFaceMessage(0))
-manager.registerMessage(LongArrayMessage(None, None))
-manager.registerMessage(RequestLongArrayMessage())
-manager.registerMessage(LongArrayBackMessage(0,0,None, staticLongArrayRequest))
-manager.registerMessage(UvVertexFinishMessage(0))
-manager.registerMessage(RequestTextureMessage())
-manager.registerMessage(TextureFinishMessage(0))
-manager.registerMessage(RequestFaceUvMessage())
-manager.registerMessage(FaceUvFinishMessage(0))
-manager.registerMessage(ReconstructionMessage())
-manager.registerMessage(ReconRecvMsg(0))
-manager.registerMessage(ReconBeginMsg())
-manager.registerMessage(ReconResultMsg(0,0))
-manager.registerMessage(ReconSingleFileImg())
-manager.registerMessage(ReconSingleImgMsg())
+    # 初始化mesh gen的server
+    # 需要调用Hunyuan 3D 生成的时候需要用到这个
+    MeshGenServer.serverInstance = MeshGenServer()
+    register_image_edit_pipeline()
 
-# 启动solver的监听过程
-solver.listen(port)
+    # 新建SocketSolver
+    solver = SocketSolver()
+    # 新建消息管理器
+    manager = MessageManager(solver)
+    # 注册基本的hello message
+    manager.registerMessage(HelloMessage())
+    manager.registerMessage(ImageMessage(None))
+    manager.registerMessage(ImageReceiveMessage(0, 0))
+    manager.registerMessage(ImageEndMessage())
+    manager.registerMessage(ImageRowData(None,0,0,0))
+    manager.registerMessage(HunyuanMeshGenMessage())
+    manager.registerMessage(MeshMessage(None, 0, 0))
+    manager.registerMessage(VertexArrayBack(None, 0, 0))
+    manager.registerMessage(VertexFinishMessage(0))
+    manager.registerMessage(RequestMeshVertices())
+    manager.registerMessage(MeshTestMessage())
+    manager.registerMessage(RequestFaceMessage())
+    manager.registerMessage(FaceArrayBack(0,0,None))
+    manager.registerMessage(FinishFaceMessage(0))
+    manager.registerMessage(LongArrayMessage(None, None))
+    manager.registerMessage(RequestLongArrayMessage())
+    manager.registerMessage(LongArrayBackMessage(0,0,None, staticLongArrayRequest))
+    manager.registerMessage(UvVertexFinishMessage(0))
+    manager.registerMessage(RequestTextureMessage())
+    manager.registerMessage(TextureFinishMessage(0))
+    manager.registerMessage(RequestFaceUvMessage())
+    manager.registerMessage(FaceUvFinishMessage(0))
+    manager.registerMessage(ReconstructionMessage())
+    manager.registerMessage(ReconRecvMsg(0))
+    manager.registerMessage(ReconBeginMsg())
+    manager.registerMessage(ReconResultMsg(0,0))
+    manager.registerMessage(ReconSingleFileImg())
+    manager.registerMessage(ReconSingleImgMsg())
 
-# 启动主线程
-thread = MessageLoop.startLoop(manager, solver)
-# python里面不要考虑多线程的事，会严重影响性能的
-thread.join()
+    # 启动solver的监听过程
+    solver.listen(port)
+
+    # 启动主线程
+    thread = MessageLoop.startLoop(manager, solver)
+    # python里面不要考虑多线程的事，会严重影响性能的
+    thread.join()
